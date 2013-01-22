@@ -1,0 +1,4 @@
+README - sandbox
+========================================================
+
+Each of us should have a folder in the "sandbox" folder as a place to play around and experiment with the data, etc.

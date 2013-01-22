@@ -1,0 +1,4 @@
+READ ME - writeup
+========================================================
+
+This folder is for our written documents for the project. For instance, we might write up a section about the data, another one that describes the results, etc.
