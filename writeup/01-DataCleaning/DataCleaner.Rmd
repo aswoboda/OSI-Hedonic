@@ -1,0 +1,81 @@
+Aaron's First Cleaning of the Data
+========================================================
+
+This document describes and shows the first data cleaning done via R after the data file was uploaded to the R Server. We'll do most of the spatial display via ArcMap, but much of the data manipulation, analysis and non-spatial display via R.
+
+```{r, cache=TRUE}
+options(width=140)
+require(foreign)
+getwd()
+HouseData = read.dbf("../../../Data/DataFromARCMAP.dbf") # this file address requires that R has the default working directory of the github repository "OSI-Hedonic"
+```
+
+What's in this file? What is the underlying structure of the data? What are the variables? How many of them? What are their values?
+```{r}
+str(HouseData)
+summary(HouseData)
+names(HouseData)
+```
+
+
+Our primary interest is testing for a relationship between the house sale price and the OSI variables. 
+------------
+* What are the units of the OSI variable?
+```{r}
+vars = c("SALE_VALUE", "tenthkmSUM", "qtrkmSUM", "halfkmSUM", "onekmSUM", "twokmSUM")
+whichVars = which(names(HouseData) %in% vars)
+corMatrix = cor(HouseData[, whichVars])
+round(corMatrix, 2)
+```
+
+Our primary dependent variable has a skewed right distribution typical of house price distributions. A log-transformation results in an approximately normal-shaped distribution.
+```{r fig.width=10, fig.height=5}
+par(mfrow = c(1, 2))
+plot(density(HouseData$SALE_VALUE), ylab = "relative frequency")
+plot(density(log(HouseData$SALE_VALUE)), ylab = "relative frequency")
+curve(dnorm(x, mean = mean(log(HouseData$SALE_VALUE)), sd = sd(log(HouseData$SALE_VALUE))),
+      add = TRUE, col = "red")
+```
+
+The following graphs show the distributions of our five Open Space Index variables. Notice that the OSI values are less skewed for the larger OSI radii. That is, the distribution of the OSI values for the 2km radius is more symmetrical than the OSI values for the .1km radius.
+```{r fig.width=12, fig.height=10}
+par(mfrow = c(2, 3))
+for (myVar in whichVars[-1]) {
+  plot(density(HouseData[, myVar]), 
+       ylab = "relative frequency", 
+       xlab = "",
+       main = names(HouseData)[myVar])
+}
+```
+
+Basic Hedonic Regression
+------
+
+Let's start constructing our basic hedonic regression by formally creating the logged sale price variable and creating some time related variables (year of sale, month of sale, etc.).
+```{r}
+HouseData$logPRICE = log(HouseData$SALE_VALUE)
+HouseData$SALE_YEAR = 1900 + as.POSIXlt(HouseData$SALE_DATE)$year
+HouseData$SALE_MONTH = 1 + as.POSIXlt(HouseData$SALE_DATE)$mon
+HouseData$YEARMON = 12*(HouseData$SALE_YEAR - 2009) + HouseData$SALE_MONTH # number of months since january 1, 2009
+```
+
+Now let's run an Ordinary Least Squares regression of the logged price on a few of our basic structural characteristics. The table below suggests that the two structural characteristics of finished square footage and lot size can explain over one-third of the total variation in logged sales price. 
+```{r}
+model1 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY, data = HouseData)
+summary(model1)
+```
+
+We now add fixed effects for the home's construction style to our regression equation in order to further explain another ten percent of the variation in our logged sale price variable.
+```{r}
+model2 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + HOME_STYLE, data = HouseData)
+summary(model2)
+```
+
+```{r}
+model3 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + HOME_STYLE + GARAGESQFT, data = HouseData)
+summary(model3)
+model4 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + HOME_STYLE + COOLING, data = HouseData)
+summary(model4)
+model5 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + HOME_STYLE + GARAGESQFT + COOLING, data = HouseData)
+summary(model5)
+```
