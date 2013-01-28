@@ -9,8 +9,12 @@ getwd()
 HouseData = read.dbf("../../../Data/DataFromARCMAP.dbf") # this file address requires that R has the default working directory of the github repository "OSI-Hedonic"
 ```
 
-What's in this file? What is the underlying structure of the data? What are the variables? How many of them? What are their values?
 ```{r}
+options(width=160)
+```
+
+What's in this file? What is the underlying structure of the data? What are the variables? How many of them? What are their values?
+```{r , cache=TRUE}
 str(HouseData)
 summary(HouseData)
 names(HouseData)
@@ -20,7 +24,7 @@ names(HouseData)
 Our primary interest is testing for a relationship between the house sale price and the OSI variables. 
 ------------
 * What are the units of the OSI variable?
-```{r}
+```{r, cache=TRUE}
 vars = c("SALE_VALUE", "tenthkmSUM", "qtrkmSUM", "halfkmSUM", "onekmSUM", "twokmSUM")
 whichVars = which(names(HouseData) %in% vars)
 corMatrix = cor(HouseData[, whichVars])
@@ -28,7 +32,7 @@ round(corMatrix, 2)
 ```
 
 Our primary dependent variable has a skewed right distribution typical of house price distributions. A log-transformation results in an approximately normal-shaped distribution.
-```{r fig.width=10, fig.height=5}
+```{r fig.width=10, fig.height=5, cache=TRUE}
 par(mfrow = c(1, 2))
 plot(density(HouseData$SALE_VALUE), ylab = "relative frequency")
 plot(density(log(HouseData$SALE_VALUE)), ylab = "relative frequency")
@@ -37,7 +41,7 @@ curve(dnorm(x, mean = mean(log(HouseData$SALE_VALUE)), sd = sd(log(HouseData$SAL
 ```
 
 The following graphs show the distributions of our five Open Space Index variables. Notice that the OSI values are less skewed for the larger OSI radii. That is, the distribution of the OSI values for the 2km radius is more symmetrical than the OSI values for the .1km radius.
-```{r fig.width=12, fig.height=10}
+```{r fig.width=12, fig.height=10, cache=TRUE}
 par(mfrow = c(2, 3))
 for (myVar in whichVars[-1]) {
   plot(density(HouseData[, myVar]), 
@@ -51,7 +55,7 @@ Basic Hedonic Regression
 ------
 
 Let's start constructing our basic hedonic regression by formally creating the logged sale price variable, converting a couple variables from string to numeric, and creating some time related variables (year of sale, month of sale, etc.).
-```{r}
+```{r, cache=TRUE}
 HouseData$logPRICE = log(HouseData$SALE_VALUE)
 HouseData$GARAGEsqft = as.numeric(as.character(HouseData$GARAGESQFT))
 HouseData$SALE_YEAR = 1900 + as.POSIXlt(HouseData$SALE_DATE)$year
@@ -60,20 +64,19 @@ HouseData$YEARMON = 12*(HouseData$SALE_YEAR - 2009) + HouseData$SALE_MONTH # num
 ```
 
 Now let's run an Ordinary Least Squares regression of the logged price on a few of our basic structural characteristics. The table below suggests that the four structural characteristics of finished square footage, lot size, garage size, and year built can explain almost half of the total variation in logged sales price. 
-```{r}
+```{r, cache=TRUE}
 StructuralModel1 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + GARAGEsqft + YEAR_BUILT, data = HouseData)
 summary(StructuralModel1)
 ```
 
 We now add fixed effects for the home's construction style to our regression equation in order to further explain another five percent of the variation in our logged sale price variable.
-```{r}
-options(width=160)
+```{r, cache=TRUE}
 StructuralModel2 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + GARAGEsqft + YEAR_BUILT + HOME_STYLE, data = HouseData)
 summary(StructuralModel2)
 ```
 
 Additional structural variables, such as the presence and type of cooling system are not reported for some counties in our study area and prevent us from including them in our regressions. We will rerun our regressions in the subset of area with cooling data to test the robustness of our results in a later section.
-```{r}
+```{r, cache=TRUE}
 table(is.na(HouseData$COOLING), HouseData$COUNTY_ID)
 ```
 
@@ -83,14 +86,14 @@ Adding Neighborhood Variables to the Regression
 We now include a few of the most commonly used neighborhood characteristics in housing hedonic functions, namely
 
 
-```{r}
+```{r, cache=TRUE}
 neighborhoodModel1 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + GARAGEsqft + YEAR_BUILT + HOME_STYLE +
   CITY + SCHOOL_DST + WhiteDense + fam_income, data = HouseData)
 summary(neighborhoodModel1)
 ```
 
 Surprisingly, few of the city or school district fixed effects seem to statistically differ from zero. Let's try a smaller scale measure of location - the elementary school catchment basin. This model now describes about two-thirds of the variation in logged sale price.
-```{r}
+```{r, cache=TRUE}
 neighborhoodModel2 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + GARAGEsqft + YEAR_BUILT + HOME_STYLE +
   ELEMENTARY + WhiteDense + fam_income, data = HouseData)
 summary(neighborhoodModel2)
@@ -101,9 +104,54 @@ Time
 The years of 2009 - 2011 were different for the real estate market relative to the early years of the 2000s. We now incorporate fixed effects for the sale year and month of sale to limit the confounding effects of the changing real estate conditions.
 * Here we should create a graph of sales price indices for the region (such as Case Schiller) and the nation.
 
-```{r}
-Model1 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + GARAGEsqft + YEAR_BUILT + HOME_STYLE + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH), 
+```{r, cache=TRUE}
+TimeModel1 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + GARAGEsqft + YEAR_BUILT + HOME_STYLE + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH), 
             data = HouseData)
-summary(Model1)
+summary(TimeModel1)
 ```
 
+Open Space Index
+---------
+Now we'll bring in the Open Space Index. First, let's just include all five different OSI measures and see what happens.
+
+```{r, cache=TRUE}
+osiModel1 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + GARAGEsqft + YEAR_BUILT + HOME_STYLE + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
+tenthkmSUM + qtrkmSUM + halfkmSUM + onekmSUM + twokmSUM, 
+            data = HouseData)
+summary(osiModel1)
+```
+
+```{r, cache=TRUE}
+osiModel2 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + GARAGEsqft + YEAR_BUILT + HOME_STYLE + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
+tenthkmSUM, 
+            data = HouseData)
+summary(osiModel2)
+```
+
+```{r, cache=TRUE}
+osiModel3 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + GARAGEsqft + YEAR_BUILT + HOME_STYLE + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
+qtrkmSUM, 
+            data = HouseData)
+summary(osiModel3)
+```
+
+```{r, cache=TRUE}
+osiModel4 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + GARAGEsqft + YEAR_BUILT + HOME_STYLE + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
+halfkmSUM, 
+            data = HouseData)
+summary(osiModel4)
+```
+
+```{r, cache=TRUE}
+osiModel5 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + GARAGEsqft + YEAR_BUILT + HOME_STYLE + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
+onekmSUM, 
+            data = HouseData)
+summary(osiModel5)
+```
+
+```{r, cache=TRUE}
+osiModel6 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + GARAGEsqft + YEAR_BUILT + HOME_STYLE + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
+twokmSUM, 
+            data = HouseData)
+summary(osiModel6)
+```
