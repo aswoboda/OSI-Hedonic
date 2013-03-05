@@ -3,10 +3,10 @@ Aaron's First Cleaning of the Data
 
 This document describes and shows the first data cleaning done via R after the data file was uploaded to the R Server. We'll do most of the spatial display via ArcMap, but much of the data manipulation, analysis and non-spatial display via R.
 
-```{r, cache=TRUE}
+```{r, cache=FALSE}
 require(foreign)
 getwd()
-HouseData = read.dbf("../../../Data/DataFromARCMAP.dbf") # this file address requires that R has the default working directory of the github repository "OSI-Hedonic"
+HouseData = read.dbf("../../../Data/GIS2R/cleaned_table_3.dbf") # this file address requires that R has the default working directory of the github repository "OSI-Hedonic"
 ```
 
 ```{r}
@@ -14,7 +14,7 @@ options(width=160)
 ```
 
 What's in this file? What is the underlying structure of the data? What are the variables? How many of them? What are their values?
-```{r , cache=TRUE}
+```{r , cache=FALSE}
 str(HouseData)
 summary(HouseData)
 names(HouseData)
@@ -135,11 +135,32 @@ qtrkmSUM,
 summary(osiModel3)
 ```
 
-```{r, cache=TRUE}
-osiModel4 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + GARAGEsqft + YEAR_BUILT + HOME_STYLE + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
+```{r, cache=FALSE}
+osiModel05KM.1 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + GARAGEsqft + YEAR_BUILT + HOME_STYLE + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
+parkArea05, 
+            data = HouseData)
+summary(osiModel05KM.1)
+```
+
+```{r, cache=FALSE}
+osiModel05KM.2 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + GARAGEsqft + YEAR_BUILT + HOME_STYLE + ELEMENTARY + WhiteDense + factor(SALE_YEAR) + factor(SALE_MONTH) +
+parkArea05, 
+            data = HouseData)
+summary(osiModel05KM.2)
+```
+
+```{r, cache=FALSE}
+osiModel05KM.3 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + GARAGEsqft + YEAR_BUILT + HOME_STYLE + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
 halfkmSUM, 
             data = HouseData)
-summary(osiModel4)
+summary(osiModel05KM.3)
+```
+
+```{r, cache=FALSE}
+osiModel05KM.4 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + GARAGEsqft + YEAR_BUILT + HOME_STYLE + ELEMENTARY + WhiteDense + factor(SALE_YEAR) + factor(SALE_MONTH) +
+halfkmSUM, 
+            data = HouseData)
+summary(osiModel05KM.4)
 ```
 
 ```{r, cache=TRUE}
@@ -155,3 +176,9 @@ twokmSUM,
             data = HouseData)
 summary(osiModel6)
 ```
+
+```{r, cache=TRUE}
+osiModel7 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + GARAGEsqft + YEAR_BUILT + HOME_STYLE + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) + StPaulDist + MinneaDist + Census_POP +
+parkArea10, 
+            data = HouseData)
+summary(osiModel7)
