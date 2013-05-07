@@ -6,7 +6,7 @@ This document describes and shows the first data cleaning done via R after the d
 ```{r, cache=FALSE}
 require(foreign)
 getwd()
-HouseData = read.dbf("~/OSI Hedonic Project/Data/GIS2R/allData.dbf") 
+HouseData = read.dbf("~/OSI-Hedonic Project/Data/GIS2R/allData.dbf") 
 ```
 
 ```{r}
