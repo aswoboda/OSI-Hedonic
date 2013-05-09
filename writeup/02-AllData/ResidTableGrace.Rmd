@@ -125,7 +125,7 @@ coef(summary(osiModel05int))[-(5:250),]
 Now let's get a table of residuals for osiModel05int
 
 ```{r, cache=FALSE}
-ResidTable=("~/OSI-Hedonic Project/Data/R2GIS/ResidTable.dbf"
+ResidTable=("~/OSI-Hedonic Project/Data/R2GIS/ResidTable.dbf")
 ModelResids=resid(osiModel05int)
 #PIN <-c(seq(start=0, to=51453, by=1, lengh.out=5, along.with=5))
 #Coef<-c(coef(osiModel05int))
