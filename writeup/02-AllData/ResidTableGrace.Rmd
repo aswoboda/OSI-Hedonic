@@ -125,11 +125,26 @@ coef(summary(osiModel05int))[-(5:250),]
 Now let's get a table of residuals for osiModel05int
 
 ```{r, cache=FALSE}
-ResidTable=("~/OSI-Hedonic Project/Data/R2GIS/ResidTable.dbf")
-ModelResids=resid(osiModel05int)
-#PIN <-c(seq(start=0, to=51453, by=1, lengh.out=5, along.with=5))
-#Coef<-c(coef(osiModel05int))
-#Resid<-c(ModelResids)
-ResidFrame=as.data.frame(resid(osiModel05int))
+ResidTable=("~/OSI-Hedonic Project/Data/R2GIS/ResidTableOSV05Int.dbf")
+ResidFrame=data.frame(HouseData$MYPIN)
+colnames(ResidFrame)[1]="MYPIN"
+ResidFrame$RESID=resid(osiModel05int)
+ResidFrame$FIT=fitted(osiModel05int)
 write.dbf(ResidFrame, ResidTable)
+```
+Now I want to try running a model without any outliers in it, classified in the Outliers column.  Now write residuals somewhere new.
+
+```{r, cache=FALSE}
+HouseDataClean=subset(HouseData, Outliers==0)
+osiModel05intClean=lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY 
+  + WhiteDense + fam_income  + factor(SALE_MONTH) + parkArea05*factor(SALE_YEAR) + 
+  OSV05KM*factor(SALE_YEAR), 
+            data = HouseDataClean)
+coef(summary(osiModel05intClean))[-(5:250),]
+ResidTableC=("~/OSI-Hedonic Project/Data/R2GIS/ResidTableOSV05IntCleaned.dbf")
+ResidFrameC=data.frame(HouseDataClean$MYPIN)
+colnames(ResidFrameC)[1]="MYPIN"
+ResidFrameC$RESID=resid(osiModel05intClean)
+ResidFrameC$FIT=fitted(osiModel05intClean)
+write.dbf(ResidFrameC, ResidTableC)
 ```

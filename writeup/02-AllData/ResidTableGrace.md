@@ -1167,442 +1167,6 @@ Open Space
 Now we'll bring in the open space measures, both Open Space Index and park area.
 
 
-
-```r
-osiModel05KM.1 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) + 
-    parkArea05, data = HouseData)
-summary(osiModel05KM.1)
-```
-
-```
-## 
-## Call:
-## lm(formula = logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + 
-##     HomeStyle + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + 
-##     factor(SALE_MONTH) + parkArea05, data = HouseData)
-## 
-## Residuals:
-##    Min     1Q Median     3Q    Max 
-## -7.017 -0.101  0.023  0.153  3.189 
-## 
-## Coefficients:
-##                                              Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)                                  4.71e+00   2.08e-01   22.66  < 2e-16 ***
-## FIN_SQ_FT                                    3.10e-04   3.26e-06   94.96  < 2e-16 ***
-## ACRES_POLY                                   4.07e-02   2.01e-03   20.27  < 2e-16 ***
-## YEAR_BUILT                                   3.33e-03   1.04e-04   32.16  < 2e-16 ***
-## HomeStyle1 Story                             2.97e-03   2.05e-02    0.14  0.88471    
-## HomeStyle1 Story Brick                       2.40e-01   2.01e-01    1.19  0.23346    
-## HomeStyle1 Story Condo                      -4.98e-01   4.11e-02  -12.11  < 2e-16 ***
-## HomeStyle1 Story Frame                       1.33e-01   2.92e-02    4.55  5.3e-06 ***
-## HomeStyle1 Story Townhouse                   6.46e-02   3.13e-02    2.07  0.03889 *  
-## HomeStyle2 1/2 Story Finished               -1.89e-01   3.46e-01   -0.54  0.58589    
-## HomeStyle2 Story                            -1.61e-02   1.98e-02   -0.81  0.41598    
-## HomeStyle2 Story Brick                       1.58e-01   3.46e-01    0.46  0.64867    
-## HomeStyle2 Story Condo                      -4.45e-01   3.39e-02  -13.12  < 2e-16 ***
-## HomeStyle2 Story Frame                       6.50e-02   2.91e-02    2.24  0.02533 *  
-## HomeStyle2 Story Townhouse                  -3.15e-01   2.95e-02  -10.68  < 2e-16 ***
-## HomeStyle3/2 Story                          -2.10e-02   2.69e-02   -0.78  0.43413    
-## HomeStyle3-LVL SPLT                         -1.90e-01   3.11e-02   -6.12  9.7e-10 ***
-## HomeStyle4 LVL SPLT                         -1.18e-01   2.78e-02   -4.24  2.3e-05 ***
-## HomeStyle5/4 Story                           1.47e-02   2.46e-02    0.60  0.54946    
-## HomeStyle7/4 Story                           1.14e-02   2.26e-02    0.50  0.61358    
-## HomeStyleBi-level                            8.79e-02   2.23e-02    3.93  8.4e-05 ***
-## HomeStyleBungalow                            1.57e-02   2.13e-02    0.74  0.46181    
-## HomeStyleCabin                              -3.37e-01   3.46e-01   -0.97  0.33007    
-## HomeStyleCondo                              -8.40e-01   3.46e-02  -24.27  < 2e-16 ***
-## HomeStyleDetached Townhome - 1 story         2.21e-01   3.25e-02    6.79  1.1e-11 ***
-## HomeStyleDetached Townhome - 2 story        -2.01e-02   5.14e-02   -0.39  0.69595    
-## HomeStyleDetached Townhome - Split Foy*      3.94e-01   2.01e-01    1.96  0.04981 *  
-## HomeStyleDetached Townhome - Split lev*      1.99e-01   9.31e-02    2.14  0.03251 *  
-## HomeStyleDouble bungalow - split foyer       1.42e-01   3.47e-01    0.41  0.68140    
-## HomeStyleDUP/TRI                            -1.36e-01   1.56e-01   -0.88  0.38148    
-## HomeStyleEarth                              -4.17e-01   2.45e-01   -1.70  0.08823 .  
-## HomeStyleLOG                                 1.60e-01   2.00e-01    0.80  0.42553    
-## HomeStyleMfd Home (Double)                  -2.57e-01   3.46e-01   -0.74  0.45760    
-## HomeStyleMini-Warehouse - Condo             -2.47e+00   1.34e-01  -18.48  < 2e-16 ***
-## HomeStyleModified two story                  7.45e-02   2.55e-02    2.92  0.00346 ** 
-## HomeStyleModular                            -1.65e+00   2.45e-01   -6.71  1.9e-11 ***
-## HomeStyleN/A                                 7.94e-03   1.42e-01    0.06  0.95545    
-## HomeStyleOther                              -1.10e+00   1.74e-01   -6.35  2.1e-10 ***
-## HomeStyleQuad - one story                   -1.62e-01   1.57e-01   -1.04  0.30055    
-## HomeStyleQuad - split level/foyer           -1.74e-01   3.54e-02   -4.92  8.6e-07 ***
-## HomeStyleQuad - Two story                   -1.98e-01   2.45e-01   -0.81  0.42039    
-## HomeStyleRAMBLER                            -1.54e-01   2.20e-02   -7.02  2.3e-12 ***
-## HomeStyleRow                                -1.85e-01   3.46e-01   -0.54  0.59196    
-## HomeStyleSalvage                             2.80e-02   1.75e-01    0.16  0.87283    
-## HomeStyleSplit Entry                        -1.20e-01   2.07e-02   -5.80  6.5e-09 ***
-## HomeStyleSPLIT-FOY                          -1.87e-01   3.05e-02   -6.13  8.7e-10 ***
-## HomeStyleSplit Foyer Frame                   1.33e-01   2.99e-02    4.45  8.4e-06 ***
-## HomeStyleSplit Level                         1.20e-02   2.07e-02    0.58  0.56176    
-## HomeStyleSplit Level Frame                   1.83e-01   3.05e-02    6.01  1.9e-09 ***
-## HomeStyleThree Story                        -2.31e-01   6.72e-02   -3.43  0.00060 ***
-## HomeStyleTOWNHOME                           -4.90e-01   1.96e-02  -25.01  < 2e-16 ***
-## HomeStyleTWIN HOME                          -2.95e-01   3.18e-02   -9.26  < 2e-16 ***
-## HomeStyleTwin home - one story              -3.73e-01   7.72e-02   -4.83  1.4e-06 ***
-## HomeStyleTwin home - spit level/ split*     -3.49e-01   4.64e-02   -7.52  5.7e-14 ***
-## HomeStyleTwin home - two story              -6.07e-01   1.18e-01   -5.16  2.5e-07 ***
-## ELEMENTARYAFTON-LAKELAND                    -7.50e-02   4.09e-02   -1.83  0.06693 .  
-## ELEMENTARYAKIN ROAD                         -4.84e-03   3.01e-02   -0.16  0.87245    
-## ELEMENTARYAMES                               1.40e-01   4.26e-02    3.28  0.00103 ** 
-## ELEMENTARYANDERSEN                           1.37e-01   6.16e-02    2.23  0.02570 *  
-## ELEMENTARYANDERSON & WILDWOOD                1.54e-01   3.45e-02    4.45  8.5e-06 ***
-## ELEMENTARYANDOVER                            4.27e-02   2.76e-02    1.55  0.12217    
-## ELEMENTARYARMSTRONG                         -6.55e-02   3.58e-02   -1.83  0.06749 .  
-## ELEMENTARYBAILEY                            -7.79e-03   3.25e-02   -0.24  0.81077    
-## ELEMENTARYBATTLE CREEK                       1.51e-01   4.18e-02    3.61  0.00031 ***
-## ELEMENTARYBEL AIR                            1.66e-01   2.96e-02    5.61  2.0e-08 ***
-## ELEMENTARYBIRCH LAKE                         9.50e-02   3.49e-02    2.73  0.00642 ** 
-## ELEMENTARYBLUE HERON                        -2.95e-02   3.15e-02   -0.94  0.34961    
-## ELEMENTARYBRIMHALL                           3.17e-01   3.06e-02   10.37  < 2e-16 ***
-## ELEMENTARYBRUCE F. VENTO                    -2.14e-01   3.44e-02   -6.21  5.2e-10 ***
-## ELEMENTARYCARVER                             5.04e-02   3.11e-02    1.62  0.10507    
-## ELEMENTARYCASTLE                             5.11e-02   3.45e-02    1.48  0.13928    
-## ELEMENTARYCEDAR CREEK                       -7.05e-02   6.72e-02   -1.05  0.29422    
-## ELEMENTARYCEDAR PARK                         5.42e-02   3.72e-02    1.46  0.14544    
-## ELEMENTARYCENTENNIAL                         1.61e-02   3.46e-02    0.47  0.64133    
-## ELEMENTARYCENTERVILLE                        6.99e-04   3.25e-02    0.02  0.98286    
-## ELEMENTARYCENTRAL PARK                       1.99e-01   3.16e-02    6.27  3.6e-10 ***
-## ELEMENTARYCHELSEA HEIGHTS                    2.37e-01   2.76e-02    8.57  < 2e-16 ***
-## ELEMENTARYCHERRY VIEW                       -5.20e-02   3.56e-02   -1.46  0.14466    
-## ELEMENTARYCHRISTINA HUDDLESTON              -7.77e-03   3.62e-02   -0.21  0.83012    
-## ELEMENTARYCOMO PARK                          1.57e-01   3.04e-02    5.18  2.2e-07 ***
-## ELEMENTARYCOTTAGE GROVE                      1.25e-02   3.41e-02    0.37  0.71477    
-## ELEMENTARYCOWERN                             4.56e-02   3.15e-02    1.44  0.14880    
-## ELEMENTARYCRESTVIEW                         -6.59e-02   3.78e-02   -1.74  0.08131 .  
-## ELEMENTARYCROOKED LAKE                       4.62e-02   3.26e-02    1.42  0.15673    
-## ELEMENTARYCRYSTAL LAKE                      -2.11e-02   3.52e-02   -0.60  0.54917    
-## ELEMENTARYDAYTONS BLUFF                     -1.90e-01   3.09e-02   -6.15  7.6e-10 ***
-## ELEMENTARYDEERWOOD                           3.02e-02   3.82e-02    0.79  0.42884    
-## ELEMENTARYDIAMOND PATH                       5.18e-02   3.08e-02    1.68  0.09206 .  
-## ELEMENTARYEAGLE CREEK                        4.39e-01   2.98e-02   14.76  < 2e-16 ***
-## ELEMENTARYEAGLE POINT                        1.19e-02   3.79e-02    0.31  0.75320    
-## ELEMENTARYEAST BETHEL & CEDAR CREEK          4.76e-03   4.18e-02    0.11  0.90928    
-## ELEMENTARYEASTERN HEIGHTS                   -4.48e-02   2.90e-02   -1.55  0.12198    
-## ELEMENTARYEASTVIEW                          -2.13e-02   3.61e-02   -0.59  0.55497    
-## ELEMENTARYECHO PARK                         -2.73e-02   3.15e-02   -0.87  0.38670    
-## ELEMENTARYEDGERTON                           1.56e-01   3.34e-02    4.68  2.8e-06 ***
-## ELEMENTARYEDWARD NEILL                       1.47e-04   3.37e-02    0.00  0.99651    
-## ELEMENTARYEISENHOWER                         6.85e-02   3.90e-02    1.76  0.07882 .  
-## ELEMENTARYEMMET D. WILLIAMS                  2.31e-01   3.11e-02    7.43  1.1e-13 ***
-## ELEMENTARYFALCON HEIGHTS                     2.51e-01   3.04e-02    8.26  < 2e-16 ***
-## ELEMENTARYFARMINGTON                        -1.19e-02   2.93e-02   -0.41  0.68469    
-## ELEMENTARYFARNSWORTH                         1.91e-01   3.62e-02    5.28  1.3e-07 ***
-## ELEMENTARYFARNSWORTH LOWER                  -1.17e-01   3.60e-02   -3.26  0.00112 ** 
-## ELEMENTARYFIVE HAWKS                         5.28e-01   2.68e-02   19.72  < 2e-16 ***
-## ELEMENTARYFOREST VIEW                       -3.29e-01   1.19e-01   -2.76  0.00579 ** 
-## ELEMENTARYFOREST VIEW & FOREST LAKE         -3.75e-01   1.34e-01   -2.80  0.00518 ** 
-## ELEMENTARYFRANKLIN                          -9.66e-02   3.01e-02   -3.21  0.00132 ** 
-## ELEMENTARYFRANKLIN MUSIC                     1.00e-01   1.43e-01    0.70  0.48330    
-## ELEMENTARYFROST LAKE                         6.24e-02   3.52e-02    1.77  0.07645 .  
-## ELEMENTARYGALTIER & MAXFIELD                 2.92e-02   2.80e-02    1.04  0.29707    
-## ELEMENTARYGARLOUGH                           1.63e-01   3.55e-02    4.59  4.4e-06 ***
-## ELEMENTARYGIDEON POND                        6.91e-02   3.84e-02    1.80  0.07193 .  
-## ELEMENTARYGLACIER HILLS                      6.86e-02   3.70e-02    1.86  0.06339 .  
-## ELEMENTARYGLENDALE                           4.40e-01   3.01e-02   14.62  < 2e-16 ***
-## ELEMENTARYGOLDEN LAKE                        1.45e-01   3.98e-02    3.63  0.00029 ***
-## ELEMENTARYGRAINWOOD                          2.54e-01   3.64e-02    6.97  3.2e-12 ***
-## ELEMENTARYGREENLEAF                         -2.26e-02   3.04e-02   -0.74  0.45743    
-## ELEMENTARYGREY CLOUD                        -1.62e-02   3.59e-02   -0.45  0.65276    
-## ELEMENTARYGROVELAND PARK                     5.13e-01   2.99e-02   17.14  < 2e-16 ***
-## ELEMENTARYGROVELAND PARK & ST. ANTHONY PARK  4.16e-01   3.43e-02   12.13  < 2e-16 ***
-## ELEMENTARYHAMILTON                           3.75e-02   3.32e-02    1.13  0.25873    
-## ELEMENTARYHANCOCK                            1.91e-01   4.78e-02    4.00  6.4e-05 ***
-## ELEMENTARYHANCOCK EL.                        2.93e-01   4.08e-02    7.18  7.2e-13 ***
-## ELEMENTARYHARRIET BISHOP                     3.16e-01   3.25e-02    9.74  < 2e-16 ***
-## ELEMENTARYHAYDEN HEIGHTS                     4.90e-02   3.62e-02    1.35  0.17633    
-## ELEMENTARYHAYDEN HTS. & PROSPERITY HTS.     -1.27e-01   3.04e-02   -4.16  3.2e-05 ***
-## ELEMENTARYHAYES                              1.35e-01   3.32e-02    4.08  4.6e-05 ***
-## ELEMENTARYHIDDEN VALLEY                      2.78e-01   3.35e-02    8.30  < 2e-16 ***
-## ELEMENTARYHIGHLAND                           6.56e-02   2.80e-02    2.34  0.01917 *  
-## ELEMENTARYHIGHLAND PARK                      4.28e-01   2.92e-02   14.64  < 2e-16 ***
-## ELEMENTARYHIGHWOOD HILLS                     9.81e-02   3.52e-02    2.79  0.00533 ** 
-## ELEMENTARYHILLSIDE                          -3.33e-02   3.70e-02   -0.90  0.36820    
-## ELEMENTARYHILLTOP                            1.02e-01   3.47e-02    2.93  0.00338 ** 
-## ELEMENTARYHOMECROFT                          2.80e-01   4.38e-02    6.41  1.5e-10 ***
-## ELEMENTARYHOOVER                             9.52e-02   3.77e-02    2.52  0.01166 *  
-## ELEMENTARYHUGO                               1.63e-02   3.32e-02    0.49  0.62264    
-## ELEMENTARYHUGO & ONEKA                       2.16e-02   3.44e-02    0.63  0.52926    
-## ELEMENTARYISLAND LAKE                        1.59e-01   2.95e-02    5.37  8.0e-08 ***
-## ELEMENTARYJACKSON                           -4.59e-01   4.03e-02  -11.40  < 2e-16 ***
-## ELEMENTARYJEFFERSON                          4.67e-02   3.13e-02    1.49  0.13550    
-## ELEMENTARYJEFFERS POND                       4.73e-01   3.45e-02   13.73  < 2e-16 ***
-## ELEMENTARYJOHN F. KENNEDY                    3.50e-02   4.99e-02    0.70  0.48257    
-## ELEMENTARYJOHNSON A+                        -1.90e-01   3.88e-02   -4.89  1.0e-06 ***
-## ELEMENTARYJOHNSVILLE                         5.40e-02   2.82e-02    1.91  0.05553 .  
-## ELEMENTARYJORDAN                             3.17e-01   1.24e-01    2.55  0.01089 *  
-## ELEMENTARYKAPOSIA                            1.11e-01   2.89e-02    3.82  0.00013 ***
-## ELEMENTARYKENNETH HALL                       2.13e-02   3.21e-02    0.66  0.50653    
-## ELEMENTARYLAKEAIRES                          2.29e-01   2.98e-02    7.68  1.6e-14 ***
-## ELEMENTARYLAKE ELMO                          4.26e-02   3.27e-02    1.30  0.19262    
-## ELEMENTARYLAKE MARION                       -1.16e-02   3.98e-02   -0.29  0.77129    
-## ELEMENTARYLAKEVIEW                          -6.33e-02   3.29e-02   -1.92  0.05461 .  
-## ELEMENTARYLiberty Ridge                     -7.16e-02   3.54e-02   -2.02  0.04322 *  
-## ELEMENTARYLIBERTY RIDGE                      1.29e-01   3.47e-02    3.73  0.00019 ***
-## ELEMENTARYLINCOLN                            8.62e-02   2.61e-02    3.31  0.00095 ***
-## ELEMENTARYLINO LAKES                         1.22e-02   3.88e-02    0.32  0.75247    
-## ELEMENTARYLITTLE CANADA                      2.16e-01   3.45e-02    6.26  3.9e-10 ***
-## ELEMENTARYL.O. JACOB                         7.67e-02   4.11e-02    1.87  0.06216 .  
-## ELEMENTARYLONGFELLOW                         4.56e-01   3.23e-02   14.13  < 2e-16 ***
-## ELEMENTARYMADISON                            8.96e-02   3.36e-02    2.67  0.00763 ** 
-## ELEMENTARYMANN                               4.46e-01   2.89e-02   15.42  < 2e-16 ***
-## ELEMENTARYMARION W. SAVAGE                   3.78e-01   2.96e-02   12.80  < 2e-16 ***
-## ELEMENTARYMATOSKA INTERNATIONAL              2.24e-01   3.88e-02    5.78  7.5e-09 ***
-## ELEMENTARYMCKINLEY                           4.79e-02   2.94e-02    1.63  0.10347    
-## ELEMENTARYMEADOWVIEW                        -2.19e-02   3.16e-02   -0.69  0.48816    
-## ELEMENTARYMENDOTA                            9.13e-02   3.45e-02    2.65  0.00812 ** 
-## ELEMENTARYMIDDLETON                          5.74e-02   3.46e-02    1.66  0.09759 .  
-## ELEMENTARYMISSISSIPPI                        6.37e-02   3.07e-02    2.07  0.03827 *  
-## ELEMENTARYMONROE                             4.34e-02   3.10e-02    1.40  0.16138    
-## ELEMENTARYMORELAND                           1.19e-01   3.05e-02    3.89  0.00010 ***
-## ELEMENTARYMORRIS BYE                        -6.28e-02   3.12e-02   -2.01  0.04409 *  
-## ELEMENTARYNEWPORT                           -1.38e-03   3.51e-02   -0.04  0.96861    
-## ELEMENTARYNORTH END                         -1.87e-01   3.04e-02   -6.15  7.7e-10 ***
-## ELEMENTARYNORTH PARK                         5.98e-02   3.23e-02    1.85  0.06429 .  
-## ELEMENTARYNORTH TRAIL                       -6.26e-03   3.10e-02   -0.20  0.83982    
-## ELEMENTARYNORTHVIEW                         -4.48e-02   3.43e-02   -1.30  0.19234    
-## ELEMENTARYOAKDALE                           -5.70e-03   3.31e-02   -0.17  0.86341    
-## ELEMENTARYOAK HILLS                         -7.51e-02   3.82e-02   -1.97  0.04939 *  
-## ELEMENTARYOAKRIDGE                           5.19e-01   2.95e-02   17.60  < 2e-16 ***
-## ELEMENTARYOAK RIDGE                          5.77e-02   3.43e-02    1.68  0.09208 .  
-## ELEMENTARYOBAMA                              5.33e-01   7.09e-02    7.52  5.5e-14 ***
-## ELEMENTARYORCHARD LAKE                       9.82e-02   3.66e-02    2.68  0.00731 ** 
-## ELEMENTARYOTTER LAKE                         9.41e-02   3.05e-02    3.09  0.00203 ** 
-## ELEMENTARYPARKER                            -4.51e-02   7.69e-02   -0.59  0.55701    
-## ELEMENTARYPARK TERRACE                       1.09e-01   3.27e-02    3.33  0.00087 ***
-## ELEMENTARYPARK TERRACE & WESTWOOD           -1.15e-01   2.45e-01   -0.47  0.63994    
-## ELEMENTARYPARKVIEW                           7.29e-02   2.94e-02    2.48  0.01331 *  
-## ELEMENTARYPARKWAY                            6.64e-02   3.69e-02    1.80  0.07222 .  
-## ELEMENTARYPEARSON                            3.82e-01   2.63e-02   14.55  < 2e-16 ***
-## ELEMENTARYPHALEN LAKE                       -1.53e-01   3.29e-02   -4.65  3.4e-06 ***
-## ELEMENTARYPILOT KNOB                         7.94e-02   3.72e-02    2.13  0.03311 *  
-## ELEMENTARYPINE BEND                          8.03e-02   3.45e-02    2.33  0.01983 *  
-## ELEMENTARYPINE HILL                         -1.85e-02   3.47e-02   -0.53  0.59491    
-## ELEMENTARYPINEWOOD                           9.60e-03   2.74e-02    0.35  0.72644    
-## ELEMENTARYPROSPERITY HEIGHTS                 1.52e-01   5.10e-02    2.98  0.00290 ** 
-## ELEMENTARYPULLMAN                           -8.15e-02   3.44e-02   -2.37  0.01788 *  
-## ELEMENTARYRAHN                               7.50e-02   3.38e-02    2.22  0.02650 *  
-## ELEMENTARYRAMSEY                            -1.07e-01   2.56e-02   -4.18  3.0e-05 ***
-## ELEMENTARYRANDOLPH HEIGHTS                   4.96e-01   2.84e-02   17.45  < 2e-16 ***
-## ELEMENTARYRED OAK                            4.71e-01   2.60e-02   18.11  < 2e-16 ***
-## ELEMENTARYRED PINE                           6.21e-02   3.18e-02    1.95  0.05120 .  
-## ELEMENTARYRED ROCK                           2.77e-02   3.59e-02    0.77  0.44016    
-## ELEMENTARYREDTAIL RIDGE                      4.65e-01   3.16e-02   14.73  < 2e-16 ***
-## ELEMENTARYRICE LAKE                          2.35e-02   3.14e-02    0.75  0.45301    
-## ELEMENTARYRICHARDSON                         1.22e-01   3.02e-02    4.04  5.3e-05 ***
-## ELEMENTARYRIVERVIEW                          5.10e-02   4.48e-02    1.14  0.25493    
-## ELEMENTARYRIVERVIEW & CHEROKEE              -2.22e-02   3.41e-02   -0.65  0.51588    
-## ELEMENTARYROOSEVELT & RIVERVIEW & CHEROKEE   1.67e-01   3.59e-02    4.65  3.3e-06 ***
-## ELEMENTARYROSEMOUNT                          3.10e-02   3.23e-02    0.96  0.33713    
-## ELEMENTARYROYAL OAKS                         1.44e-02   3.50e-02    0.41  0.68020    
-## ELEMENTARYRUM RIVER                         -3.67e-02   2.96e-02   -1.24  0.21520    
-## ELEMENTARYRUTHERFORD                         1.15e-01   4.91e-02    2.35  0.01882 *  
-## ELEMENTARYSALEM HILLS                        7.53e-02   4.92e-02    1.53  0.12576    
-## ELEMENTARYSAND CREEK                        -1.27e-02   2.86e-02   -0.44  0.65825    
-## ELEMENTARYSHANNON PARK                      -2.98e-02   3.14e-02   -0.95  0.34316    
-## ELEMENTARYSHERIDAN                           1.52e-01   4.25e-02    3.57  0.00036 ***
-## ELEMENTARYSHERIDAN & AMES                   -1.15e-01   3.01e-02   -3.82  0.00013 ***
-## ELEMENTARYSIOUX TRAIL                        7.70e-02   3.63e-02    2.12  0.03401 *  
-## ELEMENTARYSKY OAKS                           3.88e-02   3.47e-02    1.12  0.26422    
-## ELEMENTARYSKYVIEW                           -1.63e-03   3.61e-02   -0.05  0.96407    
-## ELEMENTARYSKYVIEW COMMUNITY SCHOOL           6.05e-02   3.49e-02    1.73  0.08278 .  
-## ELEMENTARYSOMERSET HEIGHTS                   1.52e-01   3.15e-02    4.82  1.4e-06 ***
-## ELEMENTARYSORTEBERG                         -3.37e-03   3.31e-02   -0.10  0.91882    
-## ELEMENTARYSOUTH GROVE                        5.76e-02   4.74e-02    1.22  0.22359    
-## ELEMENTARYSOUTHVIEW                          8.80e-03   3.11e-02    0.28  0.77739    
-## ELEMENTARYST ANTHONY PARK                    5.45e-01   3.87e-02   14.08  < 2e-16 ***
-## ELEMENTARYSTEVENSON                          1.47e-01   3.49e-02    4.22  2.4e-05 ***
-## ELEMENTARYSUNNYSIDE                          1.18e-01   3.19e-02    3.70  0.00021 ***
-## ELEMENTARYSUN PATH                           2.54e-01   2.93e-02    8.67  < 2e-16 ***
-## ELEMENTARYSWEENEY                            3.06e-01   2.81e-02   10.88  < 2e-16 ***
-## ELEMENTARYTHOMAS LAKE                        1.15e-02   3.62e-02    0.32  0.75106    
-## ELEMENTARYTURTLE LAKE                        1.64e-01   2.79e-02    5.88  4.2e-09 ***
-## ELEMENTARYTWIN LAKES                        -5.02e-01   1.58e-01   -3.18  0.00145 ** 
-## ELEMENTARYUNIVERSITY                        -1.58e-01   2.74e-02   -5.74  9.6e-09 ***
-## ELEMENTARYVADNAIS HEIGHTS                    9.64e-02   3.39e-02    2.85  0.00442 ** 
-## ELEMENTARYVALENTINE HILLS                    1.98e-01   2.94e-02    6.72  1.8e-11 ***
-## ELEMENTARYVALLEY VIEW                        1.57e-01   3.33e-02    4.72  2.3e-06 ***
-## ELEMENTARYVISTA VIEW                         7.08e-02   3.33e-02    2.13  0.03327 *  
-## ELEMENTARYWASHINGTON                         3.15e-02   3.60e-02    0.87  0.38223    
-## ELEMENTARYWEAVER                             1.28e-01   2.88e-02    4.46  8.2e-06 ***
-## ELEMENTARYWEBSTER                            2.07e-01   3.43e-02    6.05  1.5e-09 ***
-## ELEMENTARYWESTVIEW                          -5.84e-03   3.16e-02   -0.18  0.85349    
-## ELEMENTARYWESTWOOD                           3.52e-01   3.51e-02   10.01  < 2e-16 ***
-## ELEMENTARYWESTWOOD & GRAINWOOD               4.03e-01   2.89e-02   13.97  < 2e-16 ***
-## ELEMENTARYWILLIAM BYRNE                     -2.69e-02   3.59e-02   -0.75  0.45400    
-## ELEMENTARYWILLOW LANE                        1.03e-01   3.74e-02    2.75  0.00603 ** 
-## ELEMENTARYWILSHIRE PARK                      2.76e-01   6.42e-02    4.30  1.7e-05 ***
-## ELEMENTARYWILSON                            -5.43e-02   3.36e-02   -1.62  0.10618    
-## ELEMENTARYWOODBURY                           5.78e-02   3.46e-02    1.67  0.09442 .  
-## ELEMENTARYWOODCREST                          1.45e-01   2.56e-02    5.66  1.5e-08 ***
-## ELEMENTARYWOODCREST & WESTWOOD               2.59e-01   2.45e-01    1.06  0.28944    
-## ELEMENTARYWOODLAND                           4.25e-04   3.58e-02    0.01  0.99053    
-## WhiteDense                                   1.95e-01   1.20e-02   16.29  < 2e-16 ***
-## fam_income                                   4.61e-06   1.39e-07   33.27  < 2e-16 ***
-## factor(SALE_YEAR)2006                        6.35e-03   3.86e-03    1.65  0.09988 .  
-## factor(SALE_YEAR)2009                       -3.40e-01   5.68e-03  -59.84  < 2e-16 ***
-## factor(SALE_YEAR)2010                       -3.58e-01   5.85e-03  -61.16  < 2e-16 ***
-## factor(SALE_YEAR)2011                       -5.13e-01   1.03e-02  -50.05  < 2e-16 ***
-## factor(SALE_MONTH)2                         -1.37e-02   9.11e-03   -1.50  0.13373    
-## factor(SALE_MONTH)3                          1.35e-02   8.47e-03    1.59  0.11140    
-## factor(SALE_MONTH)4                          8.19e-03   8.30e-03    0.99  0.32426    
-## factor(SALE_MONTH)5                          3.90e-02   8.19e-03    4.77  1.9e-06 ***
-## factor(SALE_MONTH)6                          4.45e-02   8.02e-03    5.55  2.9e-08 ***
-## factor(SALE_MONTH)7                          4.40e-02   8.31e-03    5.30  1.2e-07 ***
-## factor(SALE_MONTH)8                          4.49e-02   8.24e-03    5.45  5.0e-08 ***
-## factor(SALE_MONTH)9                          2.71e-02   8.49e-03    3.19  0.00141 ** 
-## factor(SALE_MONTH)10                         3.98e-02   8.55e-03    4.66  3.2e-06 ***
-## factor(SALE_MONTH)11                         5.86e-03   8.83e-03    0.66  0.50678    
-## factor(SALE_MONTH)12                        -5.98e-03   9.13e-03   -0.65  0.51248    
-## parkArea05                                   6.88e-08   2.39e-08    2.88  0.00395 ** 
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
-## 
-## Residual standard error: 0.345 on 51126 degrees of freedom
-## Multiple R-squared: 0.606,	Adjusted R-squared: 0.604 
-## F-statistic:  294 on 267 and 51126 DF,  p-value: <2e-16
-```
-
-```r
-# coef(summary(osiModel05KM.1))[-(5:250),]
-```
-
-
-
-```r
-osiModel05KM.2 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + factor(SALE_YEAR) + factor(SALE_MONTH) + parkArea05, data = HouseData)
-# summary(osiModel05KM.2)
-coef(summary(osiModel05KM.2))[-(5:250), ]
-```
-
-```
-##                         Estimate Std. Error  t value   Pr(>|t|)
-## (Intercept)            4.387e+00  2.099e-01  20.9064  1.189e-96
-## FIN_SQ_FT              3.270e-04  3.259e-06 100.3449  0.000e+00
-## ACRES_POLY             4.406e-02  2.028e-03  21.7240 3.608e-104
-## YEAR_BUILT             3.603e-03  1.045e-04  34.4801 1.455e-257
-## WhiteDense             2.604e-01  1.196e-02  21.7672 1.419e-104
-## factor(SALE_YEAR)2006  5.227e-03  3.899e-03   1.3408  1.800e-01
-## factor(SALE_YEAR)2009 -2.557e-01  5.140e-03 -49.7545  0.000e+00
-## factor(SALE_YEAR)2010 -2.734e-01  5.329e-03 -51.3142  0.000e+00
-## factor(SALE_YEAR)2011 -4.307e-01  1.006e-02 -42.8323  0.000e+00
-## factor(SALE_MONTH)2   -1.472e-02  9.204e-03  -1.5987  1.099e-01
-## factor(SALE_MONTH)3    1.299e-02  8.564e-03   1.5168  1.293e-01
-## factor(SALE_MONTH)4    7.993e-03  8.393e-03   0.9523  3.410e-01
-## factor(SALE_MONTH)5    3.950e-02  8.279e-03   4.7703  1.845e-06
-## factor(SALE_MONTH)6    4.577e-02  8.106e-03   5.6468  1.643e-08
-## factor(SALE_MONTH)7    4.332e-02  8.398e-03   5.1588  2.494e-07
-## factor(SALE_MONTH)8    4.467e-02  8.332e-03   5.3612  8.303e-08
-## factor(SALE_MONTH)9    2.743e-02  8.578e-03   3.1981  1.384e-03
-## factor(SALE_MONTH)10   3.875e-02  8.645e-03   4.4820  7.409e-06
-## factor(SALE_MONTH)11   6.077e-03  8.924e-03   0.6810  4.959e-01
-## factor(SALE_MONTH)12  -5.652e-03  9.224e-03  -0.6127  5.401e-01
-## parkArea05             8.347e-08  2.413e-08   3.4585  5.437e-04
-```
-
-
-
-```r
-osiModel05KM.3 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) + 
-    OSV05KM, data = HouseData)
-coef(summary(osiModel05KM.3))[-(5:250), ]
-```
-
-```
-##                         Estimate Std. Error  t value   Pr(>|t|)
-## (Intercept)            4.724e+00  2.080e-01  22.7125 1.234e-113
-## FIN_SQ_FT              3.095e-04  3.271e-06  94.6231  0.000e+00
-## ACRES_POLY             3.928e-02  2.037e-03  19.2835  1.453e-82
-## YEAR_BUILT             3.325e-03  1.038e-04  32.0287 7.043e-223
-## WhiteDense             1.958e-01  1.200e-02  16.3212  9.880e-60
-## fam_income             4.602e-06  1.385e-07  33.2192 2.034e-239
-## factor(SALE_YEAR)2006  6.221e-03  3.857e-03   1.6130  1.068e-01
-## factor(SALE_YEAR)2009 -3.405e-01  5.677e-03 -59.9748  0.000e+00
-## factor(SALE_YEAR)2010 -3.583e-01  5.848e-03 -61.2592  0.000e+00
-## factor(SALE_YEAR)2011 -5.133e-01  1.025e-02 -50.0747  0.000e+00
-## factor(SALE_MONTH)2   -1.331e-02  9.106e-03  -1.4621  1.437e-01
-## factor(SALE_MONTH)3    1.374e-02  8.473e-03   1.6212  1.050e-01
-## factor(SALE_MONTH)4    8.522e-03  8.304e-03   1.0262  3.048e-01
-## factor(SALE_MONTH)5    3.938e-02  8.191e-03   4.8077  1.531e-06
-## factor(SALE_MONTH)6    4.499e-02  8.020e-03   5.6090  2.046e-08
-## factor(SALE_MONTH)7    4.445e-02  8.309e-03   5.3496  8.851e-08
-## factor(SALE_MONTH)8    4.519e-02  8.243e-03   5.4821  4.223e-08
-## factor(SALE_MONTH)9    2.726e-02  8.486e-03   3.2126  1.316e-03
-## factor(SALE_MONTH)10   4.000e-02  8.553e-03   4.6765  2.925e-06
-## factor(SALE_MONTH)11   6.149e-03  8.829e-03   0.6965  4.861e-01
-## factor(SALE_MONTH)12  -5.684e-03  9.127e-03  -0.6228  5.334e-01
-## OSV05KM                2.828e-09  8.368e-10   3.3790  7.281e-04
-```
-
-
-
-```r
-osiModel05KM.4 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + factor(SALE_YEAR) + factor(SALE_MONTH) + OSV05KM, data = HouseData)
-coef(summary(osiModel05KM.4))[-(5:250), ]
-```
-
-```
-##                         Estimate Std. Error  t value   Pr(>|t|)
-## (Intercept)            4.409e+00  2.100e-01  20.9937  1.933e-97
-## FIN_SQ_FT              3.263e-04  3.266e-06  99.9096  0.000e+00
-## ACRES_POLY             4.221e-02  2.057e-03  20.5213  3.303e-93
-## YEAR_BUILT             3.590e-03  1.046e-04  34.3105 4.382e-255
-## WhiteDense             2.608e-01  1.196e-02  21.8012 6.800e-105
-## factor(SALE_YEAR)2006  5.074e-03  3.898e-03   1.3015  1.931e-01
-## factor(SALE_YEAR)2009 -2.566e-01  5.138e-03 -49.9297  0.000e+00
-## factor(SALE_YEAR)2010 -2.741e-01  5.327e-03 -51.4482  0.000e+00
-## factor(SALE_YEAR)2011 -4.311e-01  1.005e-02 -42.8742  0.000e+00
-## factor(SALE_MONTH)2   -1.428e-02  9.204e-03  -1.5520  1.207e-01
-## factor(SALE_MONTH)3    1.331e-02  8.564e-03   1.5536  1.203e-01
-## factor(SALE_MONTH)4    8.418e-03  8.393e-03   1.0030  3.159e-01
-## factor(SALE_MONTH)5    3.992e-02  8.279e-03   4.8219  1.426e-06
-## factor(SALE_MONTH)6    4.639e-02  8.106e-03   5.7229  1.053e-08
-## factor(SALE_MONTH)7    4.387e-02  8.398e-03   5.2241  1.757e-07
-## factor(SALE_MONTH)8    4.500e-02  8.332e-03   5.4011  6.653e-08
-## factor(SALE_MONTH)9    2.766e-02  8.577e-03   3.2244  1.263e-03
-## factor(SALE_MONTH)10   3.895e-02  8.645e-03   4.5056  6.633e-06
-## factor(SALE_MONTH)11   6.446e-03  8.924e-03   0.7223  4.701e-01
-## factor(SALE_MONTH)12  -5.268e-03  9.225e-03  -0.5711  5.679e-01
-## OSV05KM                3.625e-09  8.454e-10   4.2874  1.811e-05
-```
-
-
-
-```r
-osiModel05 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) + parkArea05 + 
-    OSV05KM, data = HouseData)
-coef(summary(osiModel05))[-(5:250), ]
-```
-
-```
-##                         Estimate Std. Error  t value   Pr(>|t|)
-## (Intercept)            4.738e+00  2.081e-01  22.7707 3.323e-114
-## FIN_SQ_FT              3.093e-04  3.271e-06  94.5772  0.000e+00
-## ACRES_POLY             3.963e-02  2.042e-03  19.4074  1.337e-83
-## YEAR_BUILT             3.317e-03  1.039e-04  31.9315 1.490e-221
-## WhiteDense             1.953e-01  1.200e-02  16.2846  1.793e-59
-## fam_income             4.597e-06  1.385e-07  33.1818 6.873e-239
-## factor(SALE_YEAR)2006  6.294e-03  3.857e-03   1.6318  1.027e-01
-## factor(SALE_YEAR)2009 -3.400e-01  5.679e-03 -59.8645  0.000e+00
-## factor(SALE_YEAR)2010 -3.579e-01  5.851e-03 -61.1656  0.000e+00
-## factor(SALE_YEAR)2011 -5.129e-01  1.025e-02 -50.0319  0.000e+00
-## factor(SALE_MONTH)2   -1.344e-02  9.106e-03  -1.4759  1.400e-01
-## factor(SALE_MONTH)3    1.367e-02  8.473e-03   1.6139  1.066e-01
-## factor(SALE_MONTH)4    8.426e-03  8.304e-03   1.0147  3.103e-01
-## factor(SALE_MONTH)5    3.925e-02  8.191e-03   4.7922  1.655e-06
-## factor(SALE_MONTH)6    4.490e-02  8.020e-03   5.5981  2.178e-08
-## factor(SALE_MONTH)7    4.434e-02  8.309e-03   5.3370  9.489e-08
-## factor(SALE_MONTH)8    4.522e-02  8.243e-03   5.4858  4.136e-08
-## factor(SALE_MONTH)9    2.724e-02  8.486e-03   3.2097  1.329e-03
-## factor(SALE_MONTH)10   3.999e-02  8.553e-03   4.6752  2.944e-06
-## factor(SALE_MONTH)11   6.115e-03  8.829e-03   0.6926  4.885e-01
-## factor(SALE_MONTH)12  -5.623e-03  9.126e-03  -0.6161  5.378e-01
-## parkArea05             5.874e-08  2.411e-08   2.4359  1.486e-02
-## OSV05KM                2.541e-09  8.450e-10   3.0075  2.636e-03
-```
-
-
-
 ```r
 osiModel05int = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + fam_income + factor(SALE_MONTH) + parkArea05 * factor(SALE_YEAR) + 
     OSV05KM * factor(SALE_YEAR), data = HouseData)
@@ -1644,4 +1208,69 @@ coef(summary(osiModel05int))[-(5:250), ]
 ## factor(SALE_YEAR)2011:OSV05KM     1.410e-08  4.223e-09   3.3388  8.421e-04
 ```
 
+Now let's get a table of residuals for osiModel05int
+
+
+```r
+ResidTable = ("~/OSI-Hedonic Project/Data/R2GIS/ResidTableOSV05Int.dbf")
+ResidFrame = data.frame(HouseData$MYPIN)
+colnames(ResidFrame)[1] = "MYPIN"
+ResidFrame$RESID = resid(osiModel05int)
+ResidFrame$FIT = fitted(osiModel05int)
+write.dbf(ResidFrame, ResidTable)
+```
+
+Now I want to try running a model without any outliers in it, classified in the Outliers column.  Now write residuals somewhere new.
+
+
+```r
+HouseDataClean = subset(HouseData, Outliers == 0)
+osiModel05intClean = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + fam_income + factor(SALE_MONTH) + parkArea05 * factor(SALE_YEAR) + 
+    OSV05KM * factor(SALE_YEAR), data = HouseDataClean)
+coef(summary(osiModel05intClean))[-(5:250), ]
+```
+
+```
+##                                    Estimate Std. Error   t value   Pr(>|t|)
+## (Intercept)                       4.780e+00  2.071e-01  23.08489 2.623e-117
+## FIN_SQ_FT                         3.099e-04  3.260e-06  95.05699  0.000e+00
+## ACRES_POLY                        3.738e-02  2.096e-03  17.83152  6.605e-71
+## YEAR_BUILT                        3.300e-03  1.034e-04  31.91004 2.920e-221
+## WhiteDense                        1.982e-01  1.195e-02  16.59196  1.156e-61
+## fam_income                        4.572e-06  1.380e-07  33.12978 3.733e-238
+## factor(SALE_MONTH)2              -1.248e-02  9.060e-03  -1.37791  1.682e-01
+## factor(SALE_MONTH)3               1.468e-02  8.430e-03   1.74086  8.171e-02
+## factor(SALE_MONTH)4               1.008e-02  8.263e-03   1.21947  2.227e-01
+## factor(SALE_MONTH)5               4.054e-02  8.152e-03   4.97270  6.624e-07
+## factor(SALE_MONTH)6               4.630e-02  7.980e-03   5.80218  6.584e-09
+## factor(SALE_MONTH)7               4.579e-02  8.268e-03   5.53879  3.061e-08
+## factor(SALE_MONTH)8               4.491e-02  8.203e-03   5.47478  4.401e-08
+## factor(SALE_MONTH)9               2.802e-02  8.444e-03   3.31867  9.051e-04
+## factor(SALE_MONTH)10              4.142e-02  8.510e-03   4.86650  1.139e-06
+## factor(SALE_MONTH)11              7.202e-03  8.786e-03   0.81975  4.124e-01
+## factor(SALE_MONTH)12             -4.931e-03  9.082e-03  -0.54296  5.872e-01
+## parkArea05                        1.718e-08  3.841e-08   0.44734  6.546e-01
+## factor(SALE_YEAR)2006             2.187e-03  8.087e-03   0.27044  7.868e-01
+## factor(SALE_YEAR)2009            -3.565e-01  9.668e-03 -36.87995 7.136e-294
+## factor(SALE_YEAR)2010            -3.789e-01  1.026e-02 -36.92932 1.208e-294
+## factor(SALE_YEAR)2011            -5.955e-01  1.897e-02 -31.38992 3.049e-214
+## OSV05KM                           6.559e-10  1.366e-09   0.48017  6.311e-01
+## parkArea05:factor(SALE_YEAR)2006 -5.463e-08  5.412e-08  -1.00935  3.128e-01
+## parkArea05:factor(SALE_YEAR)2009  2.474e-07  6.252e-08   3.95681  7.606e-05
+## parkArea05:factor(SALE_YEAR)2010 -3.482e-08  6.518e-08  -0.53424  5.932e-01
+## parkArea05:factor(SALE_YEAR)2011  5.852e-07  1.247e-07   4.69447  2.680e-06
+## factor(SALE_YEAR)2006:OSV05KM     1.997e-09  1.810e-09   1.10338  2.699e-01
+## factor(SALE_YEAR)2009:OSV05KM     1.867e-10  2.022e-09   0.09234  9.264e-01
+## factor(SALE_YEAR)2010:OSV05KM     6.293e-09  2.130e-09   2.95401  3.138e-03
+## factor(SALE_YEAR)2011:OSV05KM     1.380e-08  4.203e-09   3.28303  1.028e-03
+```
+
+```r
+ResidTableC = ("~/OSI-Hedonic Project/Data/R2GIS/ResidTableOSV05IntCleaned.dbf")
+ResidFrameC = data.frame(HouseDataClean$MYPIN)
+colnames(ResidFrameC)[1] = "MYPIN"
+ResidFrameC$RESID = resid(osiModel05intClean)
+ResidFrameC$FIT = fitted(osiModel05intClean)
+write.dbf(ResidFrameC, ResidTableC)
+```
 
