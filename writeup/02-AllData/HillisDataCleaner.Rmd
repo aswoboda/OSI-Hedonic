@@ -1,0 +1,272 @@
+Full set of OSI Regressions
+========================================================
+
+Note: All scales, from 0.1 KM to 2 KM are in order. Within each scale, there are six regressions using different sets of variables. For readability, all results have been truncated between 5 and 250.
+
+```{r, cache=FALSE}
+require(foreign)
+getwd()
+HouseData = read.dbf("~/OSI-Hedonic Project/Data/GIS2R/allData.dbf") 
+```
+
+
+
+Basic Hedonic Regression
+------
+
+Let's start constructing our basic hedonic regression by formally creating the logged sale price variable, converting a couple variables from string to numeric, and creating some time related variables (year of sale, month of sale, etc.).
+```{r, cache=FALSE}
+HouseData$logPRICE = log(HouseData$SALE_VALUE)
+HouseData$GARAGEsqft = as.numeric(as.character(HouseData$GARAGESQFT))
+HouseData$SALE_YEAR = 1900 + as.POSIXlt(HouseData$SALE_DATE)$year
+HouseData$SALE_MONTH = 1 + as.POSIXlt(HouseData$SALE_DATE)$mon
+HouseData$YEARMON = 12*(HouseData$SALE_YEAR - 2009) + HouseData$SALE_MONTH # number of months since january 1, 2009
+```
+
+Tenth Kilometer
+---------
+
+
+```{r, cache=FALSE}
+osiModel01KM.1 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
+parkArea01, 
+            data = HouseData)
+#summary(osiModel01KM.1)
+coef(summary(osiModel01KM.1))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel01KM.2 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY  + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense +  factor(SALE_YEAR) + factor(SALE_MONTH) +
+parkArea01, 
+            data = HouseData)
+#summary(osiModel01KM.2)
+coef(summary(osiModel01KM.2))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel01KM.3 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
+OSV01KM, 
+            data = HouseData)
+coef(summary(osiModel01KM.3))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel01KM.4 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + factor(SALE_YEAR) + factor(SALE_MONTH) +
+OSV01KM, 
+            data = HouseData)
+coef(summary(osiModel01KM.4))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel01 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
+parkArea01 + OSV01KM, 
+            data = HouseData)
+coef(summary(osiModel01))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel01int = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY 
+  + WhiteDense + fam_income  + factor(SALE_MONTH) + parkArea01*factor(SALE_YEAR) + 
+  OSV01KM*factor(SALE_YEAR), 
+            data = HouseData)
+coef(summary(osiModel01int))[-(5:250),]
+```
+
+
+Quarter Kilometer
+---------
+
+
+```{r, cache=FALSE}
+osiModel025KM.1 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
+parkArea02, 
+            data = HouseData)
+#summary(osiModel025KM.1)
+coef(summary(osiModel025KM.1))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel025KM.2 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY  + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense +  factor(SALE_YEAR) + factor(SALE_MONTH) +
+parkArea02, 
+            data = HouseData)
+#summary(osiModel025KM.2)
+coef(summary(osiModel025KM.2))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel025KM.3 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
+OSV025KM, 
+            data = HouseData)
+coef(summary(osiModel025KM.3))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel025KM.4 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + factor(SALE_YEAR) + factor(SALE_MONTH) +
+OSV025KM, 
+            data = HouseData)
+coef(summary(osiModel025KM.4))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel025 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
+parkArea02 + OSV025KM, 
+            data = HouseData)
+coef(summary(osiModel025))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel025int = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY 
+  + WhiteDense + fam_income  + factor(SALE_MONTH) + parkArea02*factor(SALE_YEAR) + 
+  OSV025KM*factor(SALE_YEAR), 
+            data = HouseData)
+coef(summary(osiModel025int))[-(5:250),]
+```
+
+
+Half Kilometer
+----------
+
+
+```{r, cache=FALSE}
+osiModel05KM.1 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
+parkArea05, 
+            data = HouseData)
+#summary(osiModel05KM.1)
+coef(summary(osiModel05KM.1))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel05KM.2 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY  + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense +  factor(SALE_YEAR) + factor(SALE_MONTH) +
+parkArea05, 
+            data = HouseData)
+#summary(osiModel05KM.2)
+coef(summary(osiModel05KM.2))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel05KM.3 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
+OSV05KM, 
+            data = HouseData)
+coef(summary(osiModel05KM.3))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel05KM.4 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + factor(SALE_YEAR) + factor(SALE_MONTH) +
+OSV05KM, 
+            data = HouseData)
+coef(summary(osiModel05KM.4))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel05 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
+parkArea05 + OSV05KM, 
+            data = HouseData)
+coef(summary(osiModel05))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel05int = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY 
+  + WhiteDense + fam_income  + factor(SALE_MONTH) + parkArea05*factor(SALE_YEAR) + 
+  OSV05KM*factor(SALE_YEAR), 
+            data = HouseData)
+coef(summary(osiModel05int))[-(5:250),]
+```
+
+One Kilometer
+---------
+
+
+```{r, cache=FALSE}
+osiModel1KM.1 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
+parkArea10, 
+            data = HouseData)
+#summary(osiModel1KM.1)
+coef(summary(osiModel1KM.1))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel1KM.2 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY  + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense +  factor(SALE_YEAR) + factor(SALE_MONTH) +
+parkArea10, 
+            data = HouseData)
+#summary(osiModel05KM.2)
+coef(summary(osiModel1KM.2))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel1KM.3 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
+OSV1KM, 
+            data = HouseData)
+coef(summary(osiModel1KM.3))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel1KM.4 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + factor(SALE_YEAR) + factor(SALE_MONTH) +
+OSV1KM, 
+            data = HouseData)
+coef(summary(osiModel1KM.4))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel1 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
+parkArea10 + OSV1KM, 
+            data = HouseData)
+coef(summary(osiModel1))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel1int = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY 
+  + WhiteDense + fam_income  + factor(SALE_MONTH) + parkArea10*factor(SALE_YEAR) + 
+  OSV1KM*factor(SALE_YEAR), 
+            data = HouseData)
+coef(summary(osiModel1int))[-(5:250),]
+```
+
+
+Two Kilometer
+--------
+
+
+```{r, cache=FALSE}
+osiModel2KM.1 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
+parkArea20, 
+            data = HouseData)
+#summary(osiModel2KM.1)
+coef(summary(osiModel2KM.1))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel2KM.2 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY  + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense +  factor(SALE_YEAR) + factor(SALE_MONTH) +
+parkArea20, 
+            data = HouseData)
+#summary(osiModel2KM.2)
+coef(summary(osiModel2KM.2))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel2KM.3 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
+OSV2KM, 
+            data = HouseData)
+coef(summary(osiModel2KM.3))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel2KM.4 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + factor(SALE_YEAR) + factor(SALE_MONTH) +
+OSV2KM, 
+            data = HouseData)
+coef(summary(osiModel2KM.4))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel2 = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH) +
+parkArea20 + OSV2KM, 
+            data = HouseData)
+coef(summary(osiModel2))[-(5:250),]
+```
+
+```{r, cache=FALSE}
+osiModel2int = lm(logPRICE ~ FIN_SQ_FT + ACRES_POLY + YEAR_BUILT + HomeStyle + ELEMENTARY 
+  + WhiteDense + fam_income  + factor(SALE_MONTH) + parkArea20*factor(SALE_YEAR) + 
+  OSV2KM*factor(SALE_YEAR), 
+            data = HouseData)
+coef(summary(osiModel2int))[-(5:250),]
+```
