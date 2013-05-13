@@ -1,7 +1,7 @@
-Cross-scale OSI Regressions
+Full set of OSI Regressions
 ========================================================
 
-Note: All scales, from 0.1 KM to 2 KM are in order. Within each scale, there are six regressions using different sets iof variables. For readability, all results have been truncated between 5 and 250.
+Note: All scales, from 0.1 KM to 2 KM are in order. Within each scale, there are six regressions using different sets of variables. For readability, all results have been truncated between 5 and 250.
 
 
 ```r
