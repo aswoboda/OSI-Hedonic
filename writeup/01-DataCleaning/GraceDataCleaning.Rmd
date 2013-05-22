@@ -1,0 +1,126 @@
+Data Cleaning, Error Detection, etc. in R
+========================================================
+
+Here's an original vanilla model:
+
+```{r, cache=FALSE}
+require(foreign)
+getwd()
+HouseData = read.dbf("~/OSI-Hedonic Project/Data/GIS2R/allData.dbf") 
+```
+
+```{r}
+options(width=160)
+```
+
+Let's start constructing our basic hedonic regression by formally creating the logged sale price variable, converting a couple variables from string to numeric, and creating some time related variables (year of sale, month of sale, etc.).
+```{r, cache=FALSE}
+HouseData$logPRICE = log(HouseData$SALE_VALUE)
+HouseData$GARAGEsqft = as.numeric(as.character(HouseData$GARAGESQFT))
+HouseData$SALE_YEAR = 1900 + as.POSIXlt(HouseData$SALE_DATE)$year
+HouseData$SALE_MONTH = 1 + as.POSIXlt(HouseData$SALE_DATE)$mon
+HouseData$YEARMON = 12*(HouseData$SALE_YEAR - 2009) + HouseData$SALE_MONTH # number of months since january 1, 2009
+```
+
+Now let's run an Ordinary Least Squares regression of the logged price on a few of our basic structural characteristics. The table below suggests that the four structural characteristics of finished square footage, lot size, garage size, and year built can explain almost half of the total variation in logged sales price. 
+```{r, cache=FALSE}
+StructuralModel1 = lm(logPRICE ~ FIN_SQ_FT + ACREAGE  + YEAR_BUILT, data = HouseData)
+summary(StructuralModel1)
+```
+
+We now add fixed effects for the home's construction style to our regression equation in order to further explain another five percent of the variation in our logged sale price variable.
+```{r, cache=FALSE}
+StructuralModel2 = lm(logPRICE ~ FIN_SQ_FT + ACREAGE  + YEAR_BUILT + HomeStyle, data = HouseData)
+summary(StructuralModel2)
+```
+
+Additional structural variables, such as the presence and type of cooling system are not reported for some counties in our study area and prevent us from including them in our regressions. We will rerun our regressions in the subset of area with cooling data to test the robustness of our results in a later section.
+```{r, cache=FALSE}
+table(is.na(HouseData$COOLING), HouseData$COUNTY_ID)
+```
+
+Adding Neighborhood Variables to the Regression
+--------------
+
+We now include a few of the most commonly used neighborhood characteristics in housing hedonic functions, namely
+
+
+```{r, cache=FALSE}
+neighborhoodModel1 = lm(logPRICE ~ FIN_SQ_FT + ACREAGE  + YEAR_BUILT + HomeStyle +
+  CITY + SCHOOL_DST + WhiteDense + fam_income, data = HouseData)
+summary(neighborhoodModel1)
+```
+
+Surprisingly, few of the city or school district fixed effects seem to statistically differ from zero. Let's try a smaller scale measure of location - the elementary school catchment basin. This model now describes about two-thirds of the variation in logged sale price.
+```{r, cache=FALSE}
+neighborhoodModel2 = lm(logPRICE ~ FIN_SQ_FT + ACREAGE + YEAR_BUILT + HomeStyle +
+  ELEMENTARY + WhiteDense + fam_income, data = HouseData)
+summary(neighborhoodModel2)
+```
+
+Time
+----
+The years of 2005 - 2011 were different for the real estate market relative to the early years of the 2000s. We now incorporate fixed effects for the sale year and month of sale to limit the confounding effects of the changing real estate conditions.
+* Here we should create a graph of sales price indices for the region (such as Case Schiller) and the nation.
+
+```{r, cache=FALSE}
+TimeModel1 = lm(logPRICE ~ FIN_SQ_FT + ACREAGE  + YEAR_BUILT + HomeStyle + ELEMENTARY + WhiteDense + fam_income + factor(SALE_YEAR) + factor(SALE_MONTH), 
+            data = HouseData)
+summary(TimeModel1)
+```
+
+Open Space
+---------
+Now we'll bring in the open space measures, both Open Space Index and park area.
+
+```{r, cache=FALSE}
+osiModel05int = lm(logPRICE ~ FIN_SQ_FT + ACREAGE + YEAR_BUILT + HomeStyle + ELEMENTARY 
+  + WhiteDense + fam_income  + factor(SALE_MONTH) + parkArea05*factor(SALE_YEAR) + 
+  OSV05KM*factor(SALE_YEAR), 
+            data = HouseData)
+coef(summary(osiModel05int))[-(5:250),]
+```
+
+Now I want to try running a model without any outliers in it, classified in the Outliers column.  
+
+```{r, cache=FALSE}
+HouseDataClean=subset(HouseData, Outliers==0)
+osiModel05intClean=lm(logPRICE ~ FIN_SQ_FT + ACREAGE + YEAR_BUILT + HomeStyle + ELEMENTARY 
+  + WhiteDense + fam_income  + factor(SALE_MONTH) + parkArea05*factor(SALE_YEAR) + 
+  OSV05KM*factor(SALE_YEAR), 
+            data = HouseDataClean)
+coef(summary(osiModel05intClean))[-(5:250),]
+```
+
+Now I want to look at points where the sale price is under the land value and see what removing those does, call those homes that are not under water.
+
+```{r, cache=FALSE}
+HouseDataClean$SaleLandDiff=HouseDataClean$EMV_LAND-HouseDataClean$SALE_VALUE
+HouseDataNotUnderwater=subset(HouseDataClean, SaleLandDiff>0)
+osiModel05intNotUnderwater=lm(logPRICE ~ FIN_SQ_FT + ACREAGE + YEAR_BUILT + HomeStyle + ELEMENTARY 
+  + WhiteDense + fam_income  + factor(SALE_MONTH) + parkArea05*factor(SALE_YEAR) + 
+  OSV05KM*factor(SALE_YEAR), 
+            data = HouseDataNotUnderwater)
+coef(summary(osiModel05intNotUnderwater))
+```
+I'm now going to be looking at a comparison between very clean data of only qualified sales versus our general data.
+
+```{r, cache=FALSE}
+HouseDataQualified=subset(HouseDataClean, RamValid=='V' | RamValid=='Q')
+osiModel05intQualified=lm(logPRICE ~ FIN_SQ_FT + ACREAGE + YEAR_BUILT + HomeStyle + ELEMENTARY 
+  + WhiteDense + fam_income  + factor(SALE_MONTH) + rounPark05*factor(SALE_YEAR) + 
+  OSV05KM*factor(SALE_YEAR), 
+            data = HouseDataQualified)
+coef(summary(osiModel05intQualified))
+```
+
+Let's make sure we compare that to just Ramsey county data since it will probably differ between larger and smaller datasets.
+
+```{r, cache=FALSE}
+HouseDataRam=subset(HouseDataClean, COUNTY_ID=='123')
+osiModel05intRamOnly=lm(logPRICE ~ FIN_SQ_FT + ACREAGE + YEAR_BUILT + HomeStyle + ELEMENTARY 
+  + WhiteDense + fam_income  + factor(SALE_MONTH) + rounPark05*factor(SALE_YEAR) + 
+  OSV05KM*factor(SALE_YEAR), 
+            data = HouseDataRam)
+coef(summary(osiModel05intRamOnly))
+```
