@@ -1341,6 +1341,7 @@ coef(summary(osiModel05intQualified))
 ```
 
 
+<<<<<<< HEAD
 Let's make sure we compare that to just Ramsey county data since it will probably differ between larger and smaller datasets.
 
 
@@ -1458,4 +1459,6 @@ coef(summary(osiModel05intRamOnly))
 ## factor(SALE_YEAR)2010:OSV05KM                3.564e-08  6.798e-09   5.242506  1.607e-07
 ## factor(SALE_YEAR)2011:OSV05KM                4.107e-08  1.118e-08   3.673965  2.397e-04
 ```
+=======
+>>>>>>> 3002aaa7cbdfaaa6625e8f95228d80969297ddac
 

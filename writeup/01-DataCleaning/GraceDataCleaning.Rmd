@@ -114,6 +114,7 @@ osiModel05intQualified=lm(logPRICE ~ FIN_SQ_FT + ACREAGE + YEAR_BUILT + HomeStyl
 coef(summary(osiModel05intQualified))
 ```
 
+<<<<<<< HEAD
 Let's make sure we compare that to just Ramsey county data since it will probably differ between larger and smaller datasets.
 
 ```{r, cache=FALSE}
@@ -124,3 +125,6 @@ osiModel05intRamOnly=lm(logPRICE ~ FIN_SQ_FT + ACREAGE + YEAR_BUILT + HomeStyle 
             data = HouseDataRam)
 coef(summary(osiModel05intRamOnly))
 ```
+=======
+
+>>>>>>> 3002aaa7cbdfaaa6625e8f95228d80969297ddac

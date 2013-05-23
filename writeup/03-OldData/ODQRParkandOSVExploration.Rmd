@@ -1,0 +1,48 @@
+
+```{r, cache=FALSE}
+require(foreign)
+getwd()
+HouseData = read.dbf("~/OSI-Hedonic Project/Data/GIS2R/OldDataQualifiedRam.dbf") 
+```
+
+```{r}
+options(width=160)
+```
+
+Let's start constructing our basic hedonic regression by formally creating the logged sale price variable, converting a couple variables from string to numeric, and creating some time related variables (year of sale, month of sale, etc.).
+```{r, cache=FALSE}
+HouseData$logPRICE = log(HouseData$PRICE)
+HouseData$logSALE_VALUE = log(HouseData$SALE_VALUE)
+HouseData$GARAGEsqft = as.numeric(as.character(HouseData$GARAGESQFT))
+HouseData$SALE_YEAR = 1900 + as.POSIXlt(HouseData$SALE_DATE)$year
+HouseData$SALE_MONTH = 1 + as.POSIXlt(HouseData$SALE_DATE)$mon
+HouseData$YEARMON = 12*(HouseData$SALE_YEAR - 2009) + HouseData$SALE_MONTH # number of months since january 1, 2009
+```
+
+Base Model From ODQR Exploration
+
+```{r, cache=FALSE}
+ODQR1 = lm(logPRICE ~ SFLA + BEDRMS + BATHRMS + LOTSIZE + YRBLT + HomeStyle + ELEMENTARY 
+  + WhiteDense + fam_income  + factor(SALE_MONTH) + parkArea05*factor(SALE_YEAR) + 
+  OSV05KM*factor(SALE_YEAR), 
+            data = HouseData)
+summary(ODQR1)
+```
+
+JUST OSV
+
+```{r, cache=FALSE}
+ODQR2 = lm(logPRICE ~ SFLA + BEDRMS + BATHRMS + LOTSIZE + YRBLT + HomeStyle + ELEMENTARY 
+  + WhiteDense + fam_income  + factor(SALE_MONTH) + OSV05KM*factor(SALE_YEAR), 
+            data = HouseData)
+summary(ODQR2)
+```
+
+JUST PARKS
+
+```{r, cache=FALSE}
+ODQR3 = lm(logPRICE ~ SFLA + BEDRMS + BATHRMS + LOTSIZE + YRBLT + HomeStyle + ELEMENTARY 
+  + WhiteDense + fam_income  + factor(SALE_MONTH) + parkArea05*factor(SALE_YEAR), 
+            data = HouseData)
+summary(ODQR3)
+```
